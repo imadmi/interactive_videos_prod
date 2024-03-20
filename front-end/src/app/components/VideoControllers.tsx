@@ -205,6 +205,10 @@ const VideoControls = ({
           />
         </motion.div>
       </AnimatePresence>
+      <img
+        src="/pictures/Vochai-logo-white.png"
+        className="absolute bottom-3 right-5 text-white h-7 opacity-60"
+      />
     </>
   );
 };
