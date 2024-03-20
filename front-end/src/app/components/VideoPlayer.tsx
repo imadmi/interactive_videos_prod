@@ -5,11 +5,7 @@ import VideoControls from "./VideoControllers";
 import PauseVideo from "./PauseVideo";
 import VideoProgress from "./VideoProgress";
 
-const VideoPlayer = ({
-  VideoUrl,
-}: {
-  VideoUrl: string;
-}) => {
+const VideoPlayer = ({ VideoUrl }: { VideoUrl: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const context = useAppContext();
 
@@ -141,7 +137,7 @@ const VideoPlayer = ({
       className={`
           ${
             context.isFullscrean
-              ? "w-screen h-screen fixed top-0 right-0"
+              ? "w-screen h-dvh fixed top-0 right-0"
               : "relative w-full h-full"
           }
       `}

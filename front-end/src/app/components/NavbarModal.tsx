@@ -28,7 +28,7 @@ const Modal = () => {
   return (
     <div
       className="fixed top-14 left-0 text-1xl font-mono font-normal 
-      w-screen bg-white h-screen"
+      w-screen bg-white h-dvh"
     >
       <div
         className="p-4 mx-4 mt-10 rounded-lg flex flex-col 

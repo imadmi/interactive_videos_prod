@@ -6,9 +6,12 @@ import { VideoAsk } from "@/app/types";
 import { use, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { mockData } from "@/app/get-started/mockData";
+import { useSearchParams } from "next/navigation";
 
 const Page = (param: any) => {
   const context = useAppContext();
+  const searchParams = useSearchParams();
+  const start = searchParams.get("start");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,16 +26,20 @@ const Page = (param: any) => {
           }
         );
 
-        if (!response.ok) {
-          console.error("Fetching error:", response);
-          return;
+        // if (!response.ok) {
+        //   console.error("Fetching error:", response);
+        //   return;
+        // }
+        // const data: VideoAsk[] = await response.json();
+
+        const data: VideoAsk[] = mockData; // testing with mock data
+
+        let nextVideo = null;
+        if (start !== null && start !== "" && start !== undefined) {
+          nextVideo = data.find((video) => video.id === start);
+        } else {
+          nextVideo = data.find((video) => video.id === param.params.id);
         }
-
-        const data: VideoAsk[] = await response.json();
-
-        console.log("data", data);
-
-        const nextVideo = data.find((video) => video.id === param.params.id);
 
         if (nextVideo !== undefined) {
           context.setvideoAsk(nextVideo);

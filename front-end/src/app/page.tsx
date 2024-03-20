@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { SparklesCore } from "./components/ui/sparkles";
-import { AnimatedTooltip } from "./components/ui/animated-tooltip";
 import { HoverEffect } from "./components/ui/card-hover-effect";
 
 const people = [
@@ -34,10 +33,10 @@ const people = [
 const SparklesPreview = () => {
   return (
     <div
-      className="h-screen relative w-full bg-[#0b42bb] flex flex-col 
+      className="h-dvh relative w-full bg-black #bg-[#0b42bb] flex flex-col 
       items-center font-sans overflow-y-scroll"
     >
-      <div className="w-full absolute inset-0 min-h-screen h-full">
+      <div className="w-full absolute inset-0 min-h-dvh h-full">
         <SparklesCore
           id="tsparticlesfullpage"
           background="transparent"
@@ -67,6 +66,6 @@ const SparklesPreview = () => {
       </div>
     </div>
   );
-}
+};
 
 export default SparklesPreview;

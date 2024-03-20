@@ -183,15 +183,6 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     }, 500);
   };
 
-  const divRef = useRef<HTMLDivElement>(null);
-  const [divHeight, setDivHeight] = useState<number>(0);
-
-  useEffect(() => {
-    if (divRef.current) {
-      setDivHeight(divRef.current.offsetHeight);
-    }
-  }, []);
-
   useEffect(() => {
     const video = videoRef.current;
 
@@ -222,9 +213,32 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     }
   };
 
+  // Play the video when the component mounts
+  useEffect(() => {
+    try {
+      const playVideo = async () => {
+        if (videoRef.current) {
+          if (videoRef.current.muted === false) {
+            videoRef.current.muted = true;
+            await videoRef.current.play();
+            // set it to true because the video is paused by the browser
+            context.setIsPaused(true);
+            videoRef.current.muted = false;
+          } else {
+            await videoRef.current.play();
+            videoRef.current.muted = true;
+          }
+        }
+      };
+      playVideo();
+    } catch (error) {
+      console.error("Error playing video", error);
+    }
+  }, [context.videoAsk]);
+
   return (
     <div
-      className="w-screen h-screen flex flex-col items-center 
+      className="w-screen h-dvh flex flex-col items-center 
     justify-center bg-gray-100"
     >
       <PauseComponent
@@ -235,14 +249,13 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
       <div
         className={`relative  ${
           context.isFullscrean
-            ? "w-screen h-screen"
+            ? "w-screen h-dvh"
             : "mx-0 sm:mx-[10%] h-full sm:h-[60%]  w-full sm:w-[80%] sm:rounded-3xl lg:flex-row"
         }  overflow-hidden  flex justify-center items-center bg-black lg:bg-white `}
         onClick={togglePlayPause}
       >
         <TitleComponent />
         <div
-          ref={divRef}
           className={`lg:relative lg:h-full ${
             context.isFullscrean ? "w-full" : "max-w-full lg:w-1/2"
           }  bg-gray-950 flex items-center justify-center`}
@@ -256,7 +269,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
           />
           <div
             className={`${
-              context.isFullscrean ? "w-screen h-screen" : "lg:w-[60vw]"
+              context.isFullscrean ? "w-screen h-dvh" : "lg:w-[60vw]"
             } flex items-center justify-center ${
               context.isVideoPortrait ? "h-full w-auto" : "w-full sm:h-auto"
             }`}
@@ -273,7 +286,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
                 muted={context.isMuted}
                 autoPlay
                 onPlay={StopAudio}
-                className={`h-screen w-screen 
+                className={`h-dvh w-screen
                 ${
                   context.isVideoPortrait
                     ? `lg:h-full object-cover sm:object-contain `

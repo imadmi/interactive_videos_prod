@@ -4,7 +4,7 @@ import { IoClose } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { useAppContext } from "../AppContext";
 
-export default function UploadAudio({qstnIndex}: {qstnIndex: number}) {
+export default function UploadAudio({ qstnIndex }: { qstnIndex: number }) {
   const context = useAppContext();
   const handelUpload = async (e: any, Audiofile: File) => {
     e.preventDefault();
@@ -36,7 +36,8 @@ export default function UploadAudio({qstnIndex}: {qstnIndex: number}) {
         const newVideoAsk = [...context.videoAsks];
         if ("url" in newVideoAsk[context.VideoaskIndex]) {
           console.log("qstnIndex ", qstnIndex);
-          newVideoAsk[context.VideoaskIndex].questions[qstnIndex].url = resData.path;
+          newVideoAsk[context.VideoaskIndex].questions[qstnIndex].url =
+            resData.path;
           context.setVideoAsks(newVideoAsk);
         }
         return resData.path;
@@ -65,7 +66,7 @@ export default function UploadAudio({qstnIndex}: {qstnIndex: number}) {
   return (
     <div>
       <div
-        className="fixed inset-0 w-screen h-screen bg-gray-500 flex items-center 
+        className="fixed inset-0 w-screen h-dvh bg-gray-500 flex items-center 
                 justify-center bg-opacity-40 backdrop-blur-lg"
       >
         <div className="relative w-[450px] h-96 bg-white rounded-[40px] p-4 z-10">

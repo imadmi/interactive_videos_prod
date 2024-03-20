@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        
-          <main className="relative flex flex-col min-h-screen max-h-screen">
-            <div className="flex-grow flex-1">{children}</div>
-          </main>
-          <Toaster />
+        <main className="relative flex flex-col min-h-dvh max-h-dvh">
+          <div className="flex-grow flex-1">{children}</div>
+        </main>
+        <Toaster />
       </body>
     </html>
   );
