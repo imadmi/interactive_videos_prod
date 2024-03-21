@@ -52,7 +52,8 @@ export class UsersService {
         const questions = videoAsk.questions.map((q) => ({
           question: q.question,
           next_video_id: q.next_video_id,
-          url: q.url,
+          audioUrl: q.audioUrl,
+          redirectUrl: q.redirectUrl,
         }));
         if (index === 0 && userId !== null) {
           await prisma.videoAsk.create({
@@ -183,7 +184,7 @@ export class UsersService {
         url: videoAsk.url,
         questions: videoAsk.questions.map((q) => ({
           question: q.question,
-          url: q.url,
+          audioUrl: q.audioUrl,
           next_video_id: q.next_video_id,
         })),
       };
