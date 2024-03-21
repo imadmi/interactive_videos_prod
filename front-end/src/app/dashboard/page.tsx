@@ -38,7 +38,8 @@ const VideoUploadForm = () => {
     const newVideoAsk = [...context.videoAsks];
     newVideoAsk[videoAskIndex].questions.push({
       question: "",
-      url: "",
+      audioUrl: "",
+      redirectUrl: "",
       next_video_id: null,
     });
     context.setVideoAsks(newVideoAsk);
@@ -60,7 +61,7 @@ const VideoUploadForm = () => {
         id: "",
         title: "",
         url: "",
-        questions: [{ question: "", url: "", next_video_id: null }],
+        questions: [{ question: "", redirectUrl: "" , audioUrl: "", next_video_id: null }],
       },
     ]);
   };
@@ -246,10 +247,10 @@ const VideoUploadForm = () => {
                           py-2 px-3 text-black leading-tight focus:outline-none 
                           focus:border-2 focus:border-green-400 focus:-outline mb-2"
                         />
-                        {!qst.url && context.isAudioModalOpen && (
+                        {!qst.audioUrl && context.isAudioModalOpen && (
                           <UploadAudio qstnIndex={context.qstIndex} />
                         )}
-                        {!qst.url && (
+                        {!qst.audioUrl && (
                           <button
                             onClick={() => {
                               context.setVideoaskIndex(videoAskIndex);

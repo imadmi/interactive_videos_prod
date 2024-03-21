@@ -26,13 +26,13 @@ const Page = (param: any) => {
           }
         );
 
-        // if (!response.ok) {
-        //   console.error("Fetching error:", response);
-        //   return;
-        // }
-        // const data: VideoAsk[] = await response.json();
+        if (!response.ok) {
+          console.error("Fetching error:", response);
+          return;
+        }
+        const data: VideoAsk[] = await response.json();
 
-        const data: VideoAsk[] = mockData; // testing with mock data
+        // const data: VideoAsk[] = mockData; // testing with mock data
 
         let nextVideo = null;
         if (start !== null && start !== "" && start !== undefined) {

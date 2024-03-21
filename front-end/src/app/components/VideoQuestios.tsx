@@ -12,19 +12,20 @@ const QuestionList = ({
 
   const [ClickIndex, setClickIndex] = useState<number | null>(null);
 
-  const handleClickingQST = (
-    event: any,
-    qst: Qsts,
-    index: number
-  ) => {
+  const handleClickingQST = (event: any, qst: Qsts, index: number) => {
     event.stopPropagation();
     triggerBlink();
     context.setClickedButtonIndex(index);
 
+    if (qst.redirectUrl !== "" && qst.redirectUrl !== null) {
+      window.open(qst.redirectUrl, "_blank");
+      return;
+    }
+
     if (ClickIndex !== index && context.isVoiceAssistanceEnabled) {
       setClickIndex(index);
       // context.setaudioUrl("/audios/audioTest2.mp3");
-      context.setaudioUrl(qst.url);
+      context.setaudioUrl(qst.audioUrl);
       toggleAudioPlay();
     } else {
       handleQuestionClick(qst.next_video_id);
@@ -77,9 +78,7 @@ const QuestionList = ({
             ${isTheqstInArabic[index] && "flex-row-reverse"}
             `}
                 key={index}
-                onClick={(e) =>
-                  handleClickingQST(e, question, index)
-                }
+                onClick={(e) => handleClickingQST(e, question, index)}
                 style={{
                   animation:
                     context.blink && context.clickedButtonIndex === index

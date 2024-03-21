@@ -234,7 +234,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     } catch (error) {
       console.error("Error playing video", error);
     }
-  }, [context.videoAsk]);
+  }, [context.videoAsks]);
 
   return (
     <div

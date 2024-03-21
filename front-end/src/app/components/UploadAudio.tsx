@@ -36,7 +36,7 @@ export default function UploadAudio({ qstnIndex }: { qstnIndex: number }) {
         const newVideoAsk = [...context.videoAsks];
         if ("url" in newVideoAsk[context.VideoaskIndex]) {
           console.log("qstnIndex ", qstnIndex);
-          newVideoAsk[context.VideoaskIndex].questions[qstnIndex].url =
+          newVideoAsk[context.VideoaskIndex].questions[qstnIndex].audioUrl =
             resData.path;
           context.setVideoAsks(newVideoAsk);
         }

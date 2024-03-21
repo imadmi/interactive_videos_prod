@@ -6,8 +6,8 @@ export type VideoAsk = {
 };
 
 export type Qsts = {
-  // id: string;
   question: string;
-  url : string;
+  audioUrl : string;
+  redirectUrl: string;
   next_video_id: string | null;
 };
