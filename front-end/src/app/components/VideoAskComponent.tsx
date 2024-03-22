@@ -252,10 +252,17 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
 
     // Define the touch end handler
     const handleTouchEnd = (e: any) => {
-      const endY = e.changedTouches[0].clientY; // Get the Y coordinate of the touch end
+      const endY = e.changedTouches[0].clientY;
+      document.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+       }, { passive: false });
+
+
+       // Get the Y coordinate of the touch end
       if (endY - startY > 0) {
     
         e.stopPropagation();
+
         const stack = context.previosVideos.copy();
         if (stack.isEmpty()) {
           // router.back();
