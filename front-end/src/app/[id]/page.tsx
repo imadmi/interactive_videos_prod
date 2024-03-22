@@ -16,23 +16,24 @@ const Page = (param: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}:3001/getVideoAsks`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        // const response = await fetch(
+        //   `${process.env.NEXT_PUBLIC_API_URL}:3001/getVideoAsks`,
+        //   {
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   }
+        // );
+        // if (!response.ok) {
+        //   console.error("Fetching error:", response);
+        //   return;
+        // }
+        // const data: VideoAsk[] = await response.json();
 
-        if (!response.ok) {
-          console.error("Fetching error:", response);
-          return;
-        }
-        const data: VideoAsk[] = await response.json();
 
-        // const data: VideoAsk[] = mockData; // testing with mock data
+        const data: VideoAsk[] = mockData; // testing with mock data
+
 
         let nextVideo = null;
         if (start !== null && start !== "" && start !== undefined) {
@@ -68,6 +69,8 @@ const Page = (param: any) => {
     fetchData();
   }, []);
 
+
+  
   return (
     <>
       <VideoAskComponent

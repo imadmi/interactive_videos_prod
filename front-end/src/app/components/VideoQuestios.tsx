@@ -24,10 +24,17 @@ const QuestionList = ({
 
     if (ClickIndex !== index && context.isVoiceAssistanceEnabled) {
       setClickIndex(index);
-      // context.setaudioUrl("/audios/audioTest2.mp3");
+
       context.setaudioUrl(qst.audioUrl);
       toggleAudioPlay();
     } else {
+
+      let stack = context.previosVideos;
+      stack.push(context.videoAsk.id);
+      stack.print();
+
+      context.setPreviosVideos(stack);
+
       handleQuestionClick(qst.next_video_id);
       context.setIsPaused(false);
       toggleAnimation();
@@ -89,8 +96,8 @@ const QuestionList = ({
                 <div
                   className={`bg-[#407bff] bg-opacity-80 font-mono font-thin 
               text-sm w-8 h-8 rounded-full text-center flex items-center justify-center
-              mr-3 lg:text-white
-              ${isTheqstInArabic[index] && "mr-0 ml-3"}
+               lg:text-white
+              ${isTheqstInArabic[index] ? "mr-0 ml-3" : "mr-3 ml-0" }
               `}
                 >
                   {index + 1}

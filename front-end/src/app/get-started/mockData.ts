@@ -9,7 +9,7 @@ const mockData: VideoAsk[] = [
       {
         question: "Creating a videoask الْعَرَبِيَّة",
         audioUrl : "/audios/audioTest2.mp3",
-        redirectUrl : "https://hello",
+        redirectUrl : "",
         next_video_id: "2",
       },
       {

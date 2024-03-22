@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { VideoAsk } from "./types";
+import { Stack } from "./types";
 
 export type User = {
   id: string;
@@ -67,6 +68,8 @@ export type AppContextProps = {
   setisAudioPlayed: (isAudioPlayed: boolean) => void;
   isVoiceAssistanceEnabled: boolean;
   setisVoiceAssistanceEnabled: (isVoiceAssistanceEnabled: boolean) => void;
+  previosVideos: Stack<string>;
+  setPreviosVideos: (previosVideos: Stack<string>) => void;
 };
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -116,6 +119,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isAudioPlayed, setisAudioPlayed] = useState(false);
   const [isVoiceAssistanceEnabled, setisVoiceAssistanceEnabled] =
     useState(false);
+
+  const [previosVideos, setPreviosVideos] = useState(new Stack<string>());
 
   const contextValue: AppContextProps = {
     UpdatedCurrentTime,
@@ -170,6 +175,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setisAudioModalOpen,
     qstIndex,
     setqstIndex,
+    previosVideos,
+    setPreviosVideos,
   };
 
   return (

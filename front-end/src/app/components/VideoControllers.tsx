@@ -28,7 +28,20 @@ const VideoControls = ({
 
   const GoBack = (e: any) => {
     e.stopPropagation();
-    router.back();
+
+    const stack = context.previosVideos.copy();
+    if (stack.isEmpty()) {
+      router.back();
+      return;
+    }
+
+    const lastVideo = stack.pop();
+    context.setPreviosVideos(stack);
+    const videos = context.videoAsks;
+    const nextVideo = videos.find((video) => video.id === lastVideo)
+    if (nextVideo !== undefined) {
+      context.setvideoAsk(nextVideo);
+    }
   };
 
   return (

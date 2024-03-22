@@ -236,8 +236,58 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     }
   }, [context.videoAsks]);
 
+  const divref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log("Page mounted");
+    const div = divref.current; // Get the current element of the ref
+    if (!div) return; // Exit if div is not defined
+
+    let startY = 0; // Store the starting Y position of the touch
+
+    // Define the touch start handler
+    const handleTouchStart = (e: any) => {
+      startY = e.touches[0].clientY; // Get the Y coordinate of the touch start
+    };
+
+    // Define the touch end handler
+    const handleTouchEnd = (e: any) => {
+      const endY = e.changedTouches[0].clientY; // Get the Y coordinate of the touch end
+      if (endY - startY > 0) {
+    
+        e.stopPropagation();
+        const stack = context.previosVideos.copy();
+        if (stack.isEmpty()) {
+          // router.back();
+          return;
+        }
+
+        const lastVideo = stack.pop();
+        context.setPreviosVideos(stack);
+        const videos = context.videoAsks;
+        const nextVideo = videos.find((video) => video.id === lastVideo)
+        if (nextVideo !== undefined) {
+          context.setvideoAsk(nextVideo);
+        }
+        console.log("Swiped down");
+        // Perform actions on swipe down
+      }
+    };
+
+    // Attach the event listeners
+    div.addEventListener("touchstart", handleTouchStart, { passive: true });
+    div.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    // Cleanup function to remove event listeners
+    return () => {
+      div.removeEventListener("touchstart", handleTouchStart);
+      div.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [context.videoAsk]);
+
   return (
     <div
+      ref={divref}
       className="w-screen h-dvh flex flex-col items-center 
     justify-center bg-gray-100"
     >
