@@ -253,10 +253,11 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     // Define the touch end handler
     const handleTouchEnd = (e: any) => {
       const endY = e.changedTouches[0].clientY;
+      
+      // Prevent the default touch action lli hya refresh
       document.addEventListener('touchmove', function(e) {
         e.preventDefault();
        }, { passive: false });
-
 
        // Get the Y coordinate of the touch end
       if (endY - startY > 0) {
