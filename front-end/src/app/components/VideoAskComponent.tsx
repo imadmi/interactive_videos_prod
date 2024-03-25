@@ -283,7 +283,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
         const lastVideo = stack.pop();
         context.setPreviosVideos(stack);
         const videos = context.videoAsks;
-        if (lastVideo === undefined) return;
+        if (!lastVideo) return;
         const nextVideo = videos.find((video) => video.id === lastVideo.id);
         if (nextVideo !== undefined) {
           context.setvideoAsk(nextVideo);

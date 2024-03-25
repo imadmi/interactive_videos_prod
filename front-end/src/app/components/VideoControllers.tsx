@@ -38,7 +38,8 @@ const VideoControls = ({
     const lastVideo = stack.pop();
     context.setPreviosVideos(stack);
     const videos = context.videoAsks;
-    const nextVideo = videos.find((video) => video.id === lastVideo)
+    if (!lastVideo) return;
+    const nextVideo = videos.find((video) => video.id === lastVideo.id)
     if (nextVideo !== undefined) {
       context.setvideoAsk(nextVideo);
     }
