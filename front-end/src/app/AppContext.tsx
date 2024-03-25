@@ -68,8 +68,8 @@ export type AppContextProps = {
   setisAudioPlayed: (isAudioPlayed: boolean) => void;
   isVoiceAssistanceEnabled: boolean;
   setisVoiceAssistanceEnabled: (isVoiceAssistanceEnabled: boolean) => void;
-  previosVideos: Stack<string>;
-  setPreviosVideos: (previosVideos: Stack<string>) => void;
+  previosVideos: Stack<VideoAsk>;
+  setPreviosVideos: (previosVideos: Stack<VideoAsk>) => void;
 };
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -120,7 +120,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isVoiceAssistanceEnabled, setisVoiceAssistanceEnabled] =
     useState(false);
 
-  const [previosVideos, setPreviosVideos] = useState(new Stack<string>());
+  const [previosVideos, setPreviosVideos] = useState(new Stack<VideoAsk>());
 
   const contextValue: AppContextProps = {
     UpdatedCurrentTime,

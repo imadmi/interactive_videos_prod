@@ -236,6 +236,13 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     }
   }, [context.videoAsks]);
 
+  const scrollToDiv = (id : string) => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+};
+
   const divref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -253,15 +260,18 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     // Define the touch end handler
     const handleTouchEnd = (e: any) => {
       const endY = e.changedTouches[0].clientY;
-      
-      // Prevent the default touch action lli hya refresh
-      document.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-       }, { passive: false });
 
-       // Get the Y coordinate of the touch end
-      if (endY - startY > 0) {
-    
+      // Prevent the default touch action lli hya refresh
+      document.addEventListener(
+        "touchmove",
+        function (e) {
+          // e.preventDefault();
+        },
+        { passive: false }
+      );
+
+      // Get the Y coordinate of the touch end
+      if (endY - startY > 20) {
         e.stopPropagation();
 
         const stack = context.previosVideos.copy();
@@ -273,10 +283,12 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
         const lastVideo = stack.pop();
         context.setPreviosVideos(stack);
         const videos = context.videoAsks;
-        const nextVideo = videos.find((video) => video.id === lastVideo)
+        if (lastVideo === undefined) return;
+        const nextVideo = videos.find((video) => video.id === lastVideo.id);
         if (nextVideo !== undefined) {
           context.setvideoAsk(nextVideo);
         }
+        scrollToDiv('bottom');
         console.log("Swiped down");
         // Perform actions on swipe down
       }
@@ -294,102 +306,181 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
   }, [context.videoAsk]);
 
   return (
-    <div
-      ref={divref}
-      className="w-screen h-dvh flex flex-col items-center 
-    justify-center bg-gray-100"
-    >
-      <PauseComponent
-        togglePlayPause={togglePlayPause}
-        buttonLink={buttonLink}
-      />
-
-      <div
-        className={`relative  ${
-          context.isFullscrean
-            ? "w-screen h-dvh"
-            : "mx-0 sm:mx-[10%] h-full sm:h-[60%]  w-full sm:w-[80%] sm:rounded-3xl lg:flex-row"
-        }  overflow-hidden  flex justify-center items-center bg-black lg:bg-white `}
-        onClick={togglePlayPause}
-      >
-        <TitleComponent />
+    <div className="snap-y h-dvh w-screen overflow-auto snap-mandatory overflow-x-hidden scrollbar-hidden">
+      {context.previosVideos.toArray().map((video) => (
         <div
-          className={`lg:relative lg:h-full ${
-            context.isFullscrean ? "w-full" : "max-w-full lg:w-1/2"
-          }  bg-gray-950 flex items-center justify-center`}
+          key={video.id}
+          className="snap-center sm:hidden flex w-screen h-dvh  flex-col items-center 
+      justify-center bg-gray-100"
         >
-          <VideoControls
-            videoRef={videoRef}
-            toggleFullscreen={toggleFullscreen}
-            toggleMute={toggleMute}
-            togglePlaybackSpeed={togglePlaybackSpeed}
-            formatTime={formatTime}
-          />
           <div
-            className={`${
-              context.isFullscrean ? "w-screen h-dvh" : "lg:w-[60vw]"
-            } flex items-center justify-center ${
-              context.isVideoPortrait ? "h-full w-auto" : "w-full sm:h-auto"
-            }`}
-            style={{
-              animation: context.animate ? "swipeUp 0.3s ease-in forwards" : ``,
-            }}
+            className={`relative  ${
+              context.isFullscrean
+                ? "w-screen h-dvh"
+                : "mx-0 sm:mx-[10%] h-full sm:h-[60%]  w-full sm:w-[80%] sm:rounded-3xl lg:flex-row"
+            }  overflow-hidden  flex justify-center items-center bg-black lg:bg-white `}
+            onClick={togglePlayPause}
           >
-            <VideoPlayerProgress progress={context.videoProgress} />
-            {context.videoAsk && context.videoAsk.url && (
-              <video
-                src={context.videoAsk.url}
-                ref={videoRef}
-                loop
-                muted={context.isMuted}
-                autoPlay
-                onPlay={StopAudio}
-                className={`h-dvh w-screen
-                ${
-                  context.isVideoPortrait
-                    ? `lg:h-full object-cover sm:object-contain `
-                    : "sm:w-full sm:h-auto object-contain "
-                }
-                `}
+            <TitleComponent />
+            <div
+              className={`lg:relative lg:h-full ${
+                context.isFullscrean ? "w-full" : "max-w-full lg:w-1/2"
+              }  bg-gray-950 flex items-center justify-center`}
+            >
+              <VideoControls
+                videoRef={videoRef}
+                toggleFullscreen={toggleFullscreen}
+                toggleMute={toggleMute}
+                togglePlaybackSpeed={togglePlaybackSpeed}
+                formatTime={formatTime}
+              />
+              <div
+                className={`${
+                  context.isFullscrean ? "w-screen h-dvh" : "lg:w-[60vw]"
+                } flex items-center justify-center flex-col snap-mandatory snap-y overflow-x-hidden ${
+                  context.isVideoPortrait ? "h-full w-auto" : "w-full sm:h-auto"
+                }`}
+                style={{
+                  animation: context.animate
+                    ? "swipeUp 0.3s ease-in forwards"
+                    : ``,
+                }}
               >
-                <source src={context.videoAsk.url} />
-                Your browser does not support the video tag.
-              </video>
-            )}
+                <VideoPlayerProgress progress={context.videoProgress} />
+
+                {video && video.url && (
+                  <video
+                    src={video.url}
+                    muted={true}
+                    onPlay={StopAudio}
+                    className={`h-dvh w-screen ${
+                      context.isVideoPortrait
+                        ? `lg:h-full object-cover sm:object-contain `
+                        : "sm:w-full sm:h-auto object-contain "
+                    }
+                  `}
+                  >
+                    <source src={video.url} />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
+            </div>
+
+            <QuestionList
+              togglePlayPause={togglePlayPause}
+              handleQuestionClick={handleQuestionClick}
+              toggleAnimation={toggleAimation}
+              triggerBlink={triggerBlink}
+              toggleAudioPlay={toggleAudioPlay}
+            />
+
           </div>
         </div>
+      ))}
 
-        <QuestionList
+      <div
+      id="bottom"
+        ref={divref}
+        className="snap-center w-screen h-dvh flex flex-col items-center 
+    justify-center bg-gray-100"
+      >
+        <PauseComponent
           togglePlayPause={togglePlayPause}
-          handleQuestionClick={handleQuestionClick}
-          toggleAnimation={toggleAimation}
-          triggerBlink={triggerBlink}
-          toggleAudioPlay={toggleAudioPlay}
+          buttonLink={buttonLink}
         />
-        {context.audioUrl !== "" && (
-          <audio
-            ref={audioRef}
-            src={context.audioUrl}
-            autoPlay
-            onPlay={PauseVideoAsk}
-            onEnded={PlayVideoAsk}
+
+        <div
+          className={`relative  ${
+            context.isFullscrean
+              ? "w-screen h-dvh"
+              : "mx-0 sm:mx-[10%] h-full sm:h-[60%]  w-full sm:w-[80%] sm:rounded-3xl lg:flex-row"
+          }  overflow-hidden  flex justify-center items-center bg-black lg:bg-white `}
+          onClick={togglePlayPause}
+        >
+          <TitleComponent />
+          <div
+            className={`lg:relative lg:h-full ${
+              context.isFullscrean ? "w-full" : "max-w-full lg:w-1/2"
+            }  bg-gray-950 flex items-center justify-center`}
           >
-            <source src={context.audioUrl} type="audio/mpeg" />
-            Your browser does not support the element
-          </audio>
+            <VideoControls
+              videoRef={videoRef}
+              toggleFullscreen={toggleFullscreen}
+              toggleMute={toggleMute}
+              togglePlaybackSpeed={togglePlaybackSpeed}
+              formatTime={formatTime}
+            />
+            <div
+              className={`${
+                context.isFullscrean ? "w-screen h-dvh" : "lg:w-[60vw]"
+              } flex items-center justify-center flex-col snap-mandatory snap-y overflow-x-hidden ${
+                context.isVideoPortrait ? "h-full w-auto" : "w-full sm:h-auto"
+              }`}
+              style={{
+                animation: context.animate
+                  ? "swipeUp 0.3s ease-in forwards"
+                  : ``,
+              }}
+            >
+              <VideoPlayerProgress progress={context.videoProgress} />
+
+              {context.videoAsk && context.videoAsk.url && (
+                <video
+                  src={context.videoAsk.url}
+                  ref={videoRef}
+                  loop
+                  muted={context.isMuted}
+                  autoPlay
+                  onPlay={StopAudio}
+                  className={`h-dvh w-screen ${
+                    context.isVideoPortrait
+                      ? `lg:h-full object-cover sm:object-contain `
+                      : "sm:w-full sm:h-auto object-contain "
+                  }
+                `}
+                >
+                  <source src={context.videoAsk.url} />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </div>
+          </div>
+
+          <QuestionList
+            togglePlayPause={togglePlayPause}
+            handleQuestionClick={handleQuestionClick}
+            toggleAnimation={toggleAimation}
+            triggerBlink={triggerBlink}
+            toggleAudioPlay={toggleAudioPlay}
+          />
+          {context.audioUrl !== "" && (
+            <audio
+              ref={audioRef}
+              src={context.audioUrl}
+              autoPlay
+              onPlay={PauseVideoAsk}
+              onEnded={PlayVideoAsk}
+            >
+              <source src={context.audioUrl} type="audio/mpeg" />
+              Your browser does not support the element
+            </audio>
+          )}
+        </div>
+        {buttonLink && (
+          <Link
+            href={buttonLink}
+            className={`bg-gray-900 px-6 py-4 rounded-xl mt-10 text-white ${
+              context.isFullscrean ? "hidden" : "hidden sm:block"
+            } `}
+          >
+            <div className="inline-block font-semibold">
+              Go to your Dashboard
+            </div>
+            <FaArrowRightLong className="inline-block ml-3" />
+          </Link>
         )}
       </div>
-      {buttonLink && (
-        <Link
-          href={buttonLink}
-          className={`bg-gray-900 px-6 py-4 rounded-xl mt-10 text-white ${
-            context.isFullscrean ? "hidden" : "hidden sm:block"
-          } `}
-        >
-          <div className="inline-block font-semibold">Go to your Dashboard</div>
-          <FaArrowRightLong className="inline-block ml-3" />
-        </Link>
-      )}
     </div>
   );
 };

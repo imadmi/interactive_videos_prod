@@ -30,7 +30,7 @@ const QuestionList = ({
     } else {
 
       let stack = context.previosVideos;
-      stack.push(context.videoAsk.id);
+      stack.push(context.videoAsk);
       stack.print();
 
       context.setPreviosVideos(stack);
