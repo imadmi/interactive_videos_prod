@@ -203,7 +203,7 @@ const VideoControls = ({
         </motion.div>
       </AnimatePresence>
 
-      <AnimatePresence>
+      {/* <AnimatePresence>
         <motion.div
           onClick={GoBack}
           initial={{ opacity: 0 }}
@@ -218,7 +218,7 @@ const VideoControls = ({
             size="50"
           />
         </motion.div>
-      </AnimatePresence>
+      </AnimatePresence> */}
       <img
         src="/pictures/Vochai-logo-white.png"
         className="absolute bottom-3 right-5 text-white h-7 opacity-60"

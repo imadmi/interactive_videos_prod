@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -213,6 +213,8 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     }
   };
 
+  const myDivRef = useRef<HTMLDivElement>(null);
+
   // Play the video when the component mounts
   useEffect(() => {
     try {
@@ -236,80 +238,73 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     }
   }, [context.videoAsks]);
 
-  const scrollToDiv = (id : string) => {
+  const scrollToDiv = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "instant" });
     }
-};
+  };
 
-  const divref = useRef<HTMLDivElement>(null);
+  const [prevideo, setVideo] = useState<VideoAsk | null>(null);
+
+  // get the last video from the stack
+  useEffect(() => {
+    const lastVideo = context.previosVideos.peek();
+    if (lastVideo) {
+      setVideo(lastVideo);
+    } else {
+      setVideo(null);
+    }
+  }, [context.videoAsk]);
 
   useEffect(() => {
-    console.log("Page mounted");
-    const div = divref.current; // Get the current element of the ref
-    if (!div) return; // Exit if div is not defined
+    const checkViewPort = () => {
+      console.log('checkk');
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 1.0) {
 
-    let startY = 0; // Store the starting Y position of the touch
-
-    // Define the touch start handler
-    const handleTouchStart = (e: any) => {
-      startY = e.touches[0].clientY; // Get the Y coordinate of the touch start
-    };
-
-    // Define the touch end handler
-    const handleTouchEnd = (e: any) => {
-      const endY = e.changedTouches[0].clientY;
-
-      // Prevent the default touch action lli hya refresh
-      document.addEventListener(
-        "touchmove",
-        function (e) {
-          // e.preventDefault();
+              
+              const stack = context.previosVideos.copy();
+              if (stack.isEmpty())  return;
+      
+              const lastVideo = stack.pop();
+              context.setPreviosVideos(stack);
+              const videos = context.videoAsks;
+              if (!lastVideo) return;
+              const nextVideo = videos.find((video) => video.id === lastVideo.id);
+              if (nextVideo !== undefined) {
+                context.setvideoAsk(nextVideo);
+              }
+              scrollToDiv("bottom");
+            }
+          });
         },
-        { passive: false }
+        {
+          threshold: [1.0], // Trigger the callback when the div is visible
+        }
       );
-
-      // Get the Y coordinate of the touch end
-      if (endY - startY > 20) {
-        e.stopPropagation();
-
-        const stack = context.previosVideos.copy();
-        if (stack.isEmpty()) {
-          // router.back();
-          return;
-        }
-
-        const lastVideo = stack.pop();
-        context.setPreviosVideos(stack);
-        const videos = context.videoAsks;
-        if (!lastVideo) return;
-        const nextVideo = videos.find((video) => video.id === lastVideo.id);
-        if (nextVideo !== undefined) {
-          context.setvideoAsk(nextVideo);
-        }
-        scrollToDiv('bottom');
-        console.log("Swiped down");
-        // Perform actions on swipe down
+  
+      if (myDivRef.current) {
+        observer.observe(myDivRef.current);
       }
-    };
-
-    // Attach the event listeners
-    div.addEventListener("touchstart", handleTouchStart, { passive: true });
-    div.addEventListener("touchend", handleTouchEnd, { passive: true });
-
-    // Cleanup function to remove event listeners
-    return () => {
-      div.removeEventListener("touchstart", handleTouchStart);
-      div.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [context.videoAsk]);
+  
+      return () => {
+        if (myDivRef.current) {
+          observer.unobserve(myDivRef.current);
+        }
+      };
+    }
+    checkViewPort();
+  }, [myDivRef.current]);
 
   return (
     <div className="snap-y h-dvh w-screen overflow-auto snap-mandatory overflow-x-hidden scrollbar-hidden">
-      {context.previosVideos.toArray().map((video) => (
+      {prevideo && (
         <div
-          key={video.id}
+          ref={myDivRef}
+          key={prevideo.id}
           className="snap-center sm:hidden flex w-screen h-dvh  flex-col items-center 
       justify-center bg-gray-100"
         >
@@ -321,7 +316,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
             }  overflow-hidden  flex justify-center items-center bg-black lg:bg-white `}
             onClick={togglePlayPause}
           >
-            <TitleComponent />
+            <TitleComponent title={prevideo.title} />
             <div
               className={`lg:relative lg:h-full ${
                 context.isFullscrean ? "w-full" : "max-w-full lg:w-1/2"
@@ -348,9 +343,9 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
               >
                 <VideoPlayerProgress progress={context.videoProgress} />
 
-                {video && video.url && (
+                {prevideo && prevideo.url && (
                   <video
-                    src={video.url}
+                    src={prevideo.url}
                     muted={true}
                     onPlay={StopAudio}
                     className={`h-dvh w-screen ${
@@ -360,7 +355,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
                     }
                   `}
                   >
-                    <source src={video.url} />
+                    <source src={prevideo.url} />
                     Your browser does not support the video tag.
                   </video>
                 )}
@@ -368,20 +363,18 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
             </div>
 
             <QuestionList
-              togglePlayPause={togglePlayPause}
+              questions={prevideo.questions}
               handleQuestionClick={handleQuestionClick}
               toggleAnimation={toggleAimation}
               triggerBlink={triggerBlink}
               toggleAudioPlay={toggleAudioPlay}
             />
-
           </div>
         </div>
-      ))}
+      )}
 
       <div
-      id="bottom"
-        ref={divref}
+        id="bottom"
         className="snap-center w-screen h-dvh flex flex-col items-center 
     justify-center bg-gray-100"
       >
@@ -398,7 +391,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
           }  overflow-hidden  flex justify-center items-center bg-black lg:bg-white `}
           onClick={togglePlayPause}
         >
-          <TitleComponent />
+          <TitleComponent title={context.videoAsk.title}/>
           <div
             className={`lg:relative lg:h-full ${
               context.isFullscrean ? "w-full" : "max-w-full lg:w-1/2"
@@ -448,7 +441,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
           </div>
 
           <QuestionList
-            togglePlayPause={togglePlayPause}
+            questions={context.videoAsk.questions}
             handleQuestionClick={handleQuestionClick}
             toggleAnimation={toggleAimation}
             triggerBlink={triggerBlink}

@@ -2,30 +2,30 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
 import { IoMdClose } from "react-icons/io";
 
-export default function TitleComponent() {
+export default function TitleComponent({title} : {title? : string}) {
   const context = useAppContext();
   const [istitleVisible, setistitleVisible] = useState(true);
   const [isTheqstInArabic, setisTheqstInArabic] = useState(false);
 
   useEffect(() => {
-    if (context.videoAsk.title) {
+    if (title) {
       setistitleVisible(true);
     }
-  }, [context.videoAsk.title]);
+  }, [title]);
 
   useEffect(() => {
-    if (context.videoAsk && context.videoAsk.title) {
+    if (context.videoAsk && title) {
       const arabicLetterRegex = /[\u0600-\u06FF]/;
-      setisTheqstInArabic(arabicLetterRegex.test(context.videoAsk.title));
+      setisTheqstInArabic(arabicLetterRegex.test(title));
     }
   }, [context.videoAsk]);
 
   return (
     <>
-      {istitleVisible && context.videoAsk.title && (
+      {istitleVisible && title && (
         <div
           className="absolute top-24 left-5 text-gray-100 font-sans max-w-full lg:w-[45%]
-        text-6xl w-[90%] z-10 flex flex-col drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]
+        text-5xl w-[90%] z-10 flex flex-col drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]
         "
           onClick={(e) => e.stopPropagation()}
         >
@@ -34,7 +34,7 @@ export default function TitleComponent() {
             ${isTheqstInArabic && "text-end"}
           `}
           >
-            {context.videoAsk.title}
+            {title}
           </div>
           <IoMdClose
             className="block text-white mt-3 ml-3 hover:rounded-full 

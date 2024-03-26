@@ -1,13 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Qsts } from "../types";
 
 const QuestionList = ({
+  questions,
   handleQuestionClick,
   toggleAnimation,
   triggerBlink,
   toggleAudioPlay,
-}: any) => {
+}: {
+  questions: Qsts[];
+  handleQuestionClick: (nextVideoId: string | null) => Promise<void>;
+  toggleAnimation: () => Promise<void>;
+  triggerBlink: () => void;
+  toggleAudioPlay: () => void;
+}) => {
   const context = useAppContext();
 
   const [ClickIndex, setClickIndex] = useState<number | null>(null);
@@ -28,7 +35,6 @@ const QuestionList = ({
       context.setaudioUrl(qst.audioUrl);
       toggleAudioPlay();
     } else {
-
       let stack = context.previosVideos;
       stack.push(context.videoAsk);
       stack.print();
@@ -46,9 +52,9 @@ const QuestionList = ({
   const [isTheqstInArabic, setisTheqstInArabic] = useState([false]);
 
   useEffect(() => {
-    if (context.videoAsk && context.videoAsk.questions) {
+    if (context.videoAsk && questions) {
       setisTheqstInArabic(
-        context.videoAsk.questions.map((qst) => {
+        questions.map((qst) => {
           const arabicLetterRegex = /[\u0600-\u06FF]/;
           return arabicLetterRegex.test(qst.question);
         })
@@ -71,11 +77,11 @@ const QuestionList = ({
           className="font-thin font-sans mb-3 lg:font-normal text-gray-300
        lg:text-gray-700 text-md lg:mb-3"
         >
-          Choose 1 of {context.videoAsk.questions.length} options
+          Choose 1 of {questions.length} options
         </h3>
-        {context.videoAsk && context.videoAsk.questions && (
+        {context.videoAsk && questions && (
           <>
-            {context.videoAsk.questions.map((question, index) => (
+            {questions.map((question, index) => (
               <button
                 className={`flex flex-row  items-center text-left lg:w-4/6 md:w-3/6 
             w-[90%] mb-2 lg:mb-3 p-3 bg-black bg-opacity-55 lg:text-black 
@@ -97,7 +103,7 @@ const QuestionList = ({
                   className={`bg-[#407bff] bg-opacity-80 font-mono font-thin 
               text-sm w-8 h-8 rounded-full text-center flex items-center justify-center
                lg:text-white
-              ${isTheqstInArabic[index] ? "mr-0 ml-3" : "mr-3 ml-0" }
+              ${isTheqstInArabic[index] ? "mr-0 ml-3" : "mr-3 ml-0"}
               `}
                 >
                   {index + 1}
