@@ -27,7 +27,6 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Initializes the video player with the first video from the mockData array upon component mount or when mockData changes
   useEffect(() => {
     if (mockData) {
       context.setVideoAsks(mockData);
