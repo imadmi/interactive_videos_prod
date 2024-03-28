@@ -35,7 +35,6 @@ model Question {
   question           String
   next_video_id      String?
   audioUrl           String
-  redirectUrl        String
   videoAskId         String
   videoAsk           VideoAsk    @relation(fields: [videoAskId], references: [id])
 }

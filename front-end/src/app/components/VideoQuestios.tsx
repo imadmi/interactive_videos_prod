@@ -24,8 +24,10 @@ const QuestionList = ({
     triggerBlink();
     context.setClickedButtonIndex(index);
 
-    if (qst.redirectUrl !== "" && qst.redirectUrl !== null) {
-      window.open(qst.redirectUrl, "_blank");
+    // check if the next videoid is a url
+
+    if (qst.next_video_id !== null && qst.next_video_id.includes("http")) {
+      window.open(qst.next_video_id, "_blank");
       return;
     }
 

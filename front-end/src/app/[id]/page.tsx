@@ -5,7 +5,7 @@ import VideoAskComponent from "@/app/components/VideoAskComponent";
 import { VideoAsk } from "@/app/types";
 import { use, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { mockData } from "@/app/get-started/mockData";
+import { mockData } from "../../../mockData";
 import { useSearchParams } from "next/navigation";
 
 const Page = (param: any) => {
@@ -31,9 +31,7 @@ const Page = (param: any) => {
         // }
         // const data: VideoAsk[] = await response.json();
 
-
         const data: VideoAsk[] = mockData; // testing with mock data
-
 
         let nextVideo = null;
         if (start !== null && start !== "" && start !== undefined) {
@@ -69,8 +67,6 @@ const Page = (param: any) => {
     fetchData();
   }, []);
 
-
-  
   return (
     <>
       <VideoAskComponent

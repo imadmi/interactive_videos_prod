@@ -39,7 +39,7 @@ const VideoControls = ({
     context.setPreviosVideos(stack);
     const videos = context.videoAsks;
     if (!lastVideo) return;
-    const nextVideo = videos.find((video) => video.id === lastVideo.id)
+    const nextVideo = videos.find((video) => video.id === lastVideo.id);
     if (nextVideo !== undefined) {
       context.setvideoAsk(nextVideo);
     }
@@ -219,10 +219,14 @@ const VideoControls = ({
           />
         </motion.div>
       </AnimatePresence> */}
-      <img
-        src="/pictures/Vochai-logo-white.png"
-        className="absolute bottom-3 right-5 text-white h-7 opacity-60"
-      />
+      <div className="absolute bottom-0 right-0 w-full h-10 bg-cyan-400 bg-opacity-50 
+      flex flex-row justify-center items-center font-sans">
+        Powered by:
+        <img
+          src="/pictures/Vochai-logo-blue.png"
+          className="ml-2 text-white h-7 "
+        />
+      </div>
     </>
   );
 };

@@ -1,16 +1,9 @@
-# Normal way
-def userEntity(item) -> dict:
-    return {
-        "id":str(item["_id"]),
-        "video_id":item["video_id"],
-    }
+from models.videoAsk import VideoAsk, Question
 
-def usersEntity(entity) -> list:
-    return [userEntity(item) for item in entity]
-#Best way
+# Serialize data to JSON
+def serialize_videoask(videoask: VideoAsk) -> dict:
+    return videoask.dict()
 
-def serializeDict(a) -> dict:
-    return {**{i:str(a[i]) for i in a if i=='_id'},**{i:a[i] for i in a if i!='_id'}}
-
-def serializeList(entity) -> list:
-    return [serializeDict(a) for a in entity]
+# Deserialize JSON to Pydantic model object
+def deserialize_videoask(json_data: dict) -> VideoAsk:
+    return VideoAsk(**json_data)

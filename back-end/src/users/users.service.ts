@@ -53,7 +53,6 @@ export class UsersService {
           question: q.question,
           next_video_id: q.next_video_id,
           audioUrl: q.audioUrl,
-          redirectUrl: q.redirectUrl,
         }));
         if (index === 0 && userId !== null) {
           await prisma.videoAsk.create({

@@ -90,7 +90,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       id: "",
       title: "",
       url: "",
-      questions: [{ question: "", redirectUrl : "", audioUrl: "", next_video_id: null }],
+      questions: [{ question: "", audioUrl: "", next_video_id: null }],
     },
   ]);
 

@@ -9,5 +9,4 @@ export type VideoAsk = {
     question: string;
     next_video_id: string | null;
     audioUrl : string;
-    redirectUrl: string;
   };

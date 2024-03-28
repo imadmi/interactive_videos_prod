@@ -1,18 +1,36 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from models.videoAsk import VideoAsk
-from config.database import client
+from config.database import videoAsk_collection
+from typing import List
 
 videoAskRouter = APIRouter()
 
-@videoAskRouter.get("/")
-async def root():
-    #'videoAsk' is the name of your collection
-    videoAsk_collection = client['abc']['videoAsk']
-    # print(videoAsk_collection)
-
+@videoAskRouter.post("/saveVideoAsk")
+async def save_VideoAsk(videoAsks : List[VideoAsk]):
+    try:
+        print (videoAsks)
     # Insert a document into the 'videoAsk' collection
-    videoAsk_collection.insert_one({"id": 1, "video_id": 1})
+        # videoAsk_collection.insert_one(List[videoAsk])
+        # for videoAsk in videoAsks:
+        #     videoAsk_collection.insert_one(videoAsk.dict())
 
-    # # Find a document in the 'videoAsk' collection
-    videoAsk_collection.find_one({"id": 1})
-    return {"message": "Hello World"}
+        await videoAsk_collection.insert_one(List[videoAsks])
+
+        # videoAsk_collection.find_one({"id": 1})
+        return {"message": "Hello World"}
+    except Exception as e:
+        print(str(e))
+
+
+@videoAskRouter.get("/getVideoAsk")
+async def get_VideoAsk()-> List[dict]:
+    try:
+        videoAsks = videoAsk_collection.find()
+        for videoAsk in videoAsks:
+            print (videoAsk)
+
+        videoAsks_list = [doc for doc in videoAsks]
+        return videoAsks_list
+    except Exception as e:
+        print(str(e))
+

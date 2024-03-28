@@ -9,3 +9,5 @@ uri = os.getenv("MONGO_URI")
 
 client = MongoClient(uri,
     tlsCAFile=ca)
+
+videoAsk_collection = client['abc']['videoAsk']

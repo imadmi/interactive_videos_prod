@@ -1,4 +1,4 @@
-import { VideoAsk } from "../types";
+import { VideoAsk } from "./src/app/types";
 
 const mockData: VideoAsk[] = [
   {
@@ -8,33 +8,28 @@ const mockData: VideoAsk[] = [
     questions: [
       {
         question: "Creating a videoask الْعَرَبِيَّة",
-        audioUrl : "/audios/audioTest2.mp3",
-        redirectUrl : "",
+        audioUrl: "/audios/audioTest2.mp3",
         next_video_id: "2",
       },
       {
         question: "Navigating your responses",
-        audioUrl : "/audios/audioTest.mp3",
-        redirectUrl : "",
+        audioUrl: "/audios/audioTest.mp3",
         next_video_id: "3",
       },
       {
         question: "Managing your contacts",
-        audioUrl : "/audios/audioTest2.mp3",
-        redirectUrl : "",
+        audioUrl: "/audios/audioTest2.mp3",
         next_video_id: "4",
       },
       {
         question: "Account and org settings",
-        audioUrl : "/audios/audioTest.mp3",
-        redirectUrl : "",
+        audioUrl: "/audios/audioTest.mp3",
         next_video_id: "5",
       },
       {
-        question: "I'm ready, go to my dashboard!",
-        audioUrl : "/audios/audioTest2.mp3",
-        redirectUrl : "",
-        next_video_id: null,
+        question: "Click to open a new tab!",
+        audioUrl: "/audios/audioTest2.mp3",
+        next_video_id: "https://www.hello.com/",
       },
     ],
   },
@@ -46,26 +41,22 @@ const mockData: VideoAsk[] = [
     questions: [
       {
         question: "Navigating your responses",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "3",
       },
       {
         question: "Managing your contacts الْعَرَبِيَّة",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "4",
       },
       {
         question: "Account and org settings",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "5",
       },
       {
         question: "I'm ready, go to my dashboard!",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: null,
       },
     ],
@@ -78,26 +69,22 @@ const mockData: VideoAsk[] = [
     questions: [
       {
         question: "Creating a videoask",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "2",
       },
       {
         question: "Managing your contacts",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "4",
       },
       {
         question: "Account and org settings  الْعَرَبِيَّة",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "5",
       },
       {
         question: "I'm ready, go to my dashboard!",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: null,
       },
     ],
@@ -110,26 +97,22 @@ const mockData: VideoAsk[] = [
     questions: [
       {
         question: "Creating a videoask",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "2",
       },
       {
         question: "Navigating your responses",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "3",
       },
       {
         question: "Account and org settings",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "5",
       },
       {
         question: "I'm ready, go to my dashboard!  الْعَرَبِيَّة",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: null,
       },
     ],
@@ -142,26 +125,22 @@ const mockData: VideoAsk[] = [
     questions: [
       {
         question: "Creating a videoask  الْعَرَبِيَّة",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "2",
       },
       {
         question: "Navigating your responses",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "3",
       },
       {
         question: "Managing your contacts",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: "4",
       },
       {
         question: "I'm ready, go to my dashboard!",
-        audioUrl : "",
-        redirectUrl : "",
+        audioUrl: "",
         next_video_id: null,
       },
     ],

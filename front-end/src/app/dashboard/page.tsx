@@ -39,7 +39,6 @@ const VideoUploadForm = () => {
     newVideoAsk[videoAskIndex].questions.push({
       question: "",
       audioUrl: "",
-      redirectUrl: "",
       next_video_id: null,
     });
     context.setVideoAsks(newVideoAsk);
@@ -61,7 +60,9 @@ const VideoUploadForm = () => {
         id: "",
         title: "",
         url: "",
-        questions: [{ question: "", redirectUrl: "" , audioUrl: "", next_video_id: null }],
+        questions: [
+          { question: "", audioUrl: "", next_video_id: null },
+        ],
       },
     ]);
   };
@@ -83,27 +84,33 @@ const VideoUploadForm = () => {
   };
 
   const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}:3001/saveVideoAsk`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(context.videoAsks),
-      }
-    );
-    console.log(context.videoAsks);
-    const data = await res.json();
+    try {
+      e.preventDefault();
+      const res = await fetch(
+        // `${process.env.NEXT_PUBLIC_API_URL}:3001/saveVideoAsk`,
+        `http://127.0.0.1:8000/saveVideoAsk`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(context.videoAsks),
+        }
+      );
+      console.log(context.videoAsks);
+      const data = await res.json();
 
-    if (data.success) {
-      toast.success("VideoAsk created successfully");
-    } else if (data.error) {
-      const msg = "Failed to create VideoAsk :" + data.error;
-      toast.error(msg);
-    } else {
+      if (data.success) {
+        toast.success("VideoAsk created successfully");
+      } else if (data.error) {
+        const msg = "Failed to create VideoAsk :" + data.error;
+        toast.error(msg);
+      } else {
+        toast.error("Failed to create VideoAsk");
+      }
+    } catch (error) {
+      console.log(error);
       toast.error("Failed to create VideoAsk");
     }
   };
@@ -142,9 +149,7 @@ const VideoUploadForm = () => {
                     </label>
                     {isFormVisible[videoAskIndex] === false && (
                       <div
-                        className={`ml-4 ${
-                          isFormVisible[videoAskIndex] === true && "mb-2 "
-                        }`}
+                        className={`ml-4`}
                       >
                         {videoAsk.id}
                       </div>
