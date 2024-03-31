@@ -1,23 +1,23 @@
 from fastapi import APIRouter, HTTPException
 from models.videoAsk import VideoAsk
-from config.database import videoAsk_collection
+from config.database import videoAsk_collection , client
 from typing import List
 
 videoAskRouter = APIRouter()
 
 @videoAskRouter.post("/saveVideoAsk")
-async def save_VideoAsk(videoAsks : List[VideoAsk]):
+def save_VideoAsk(videoAsks : List[VideoAsk]):
     try:
-        print (videoAsks)
-    # Insert a document into the 'videoAsk' collection
-        # videoAsk_collection.insert_one(List[videoAsk])
-        # for videoAsk in videoAsks:
-        #     videoAsk_collection.insert_one(videoAsk.dict())
+        # R = client.abc
+        # print(R)
+        videoAsks_dict = [videoAsk.dict() for videoAsk in videoAsks]
 
-        await videoAsk_collection.insert_one(List[videoAsks])
+        result = videoAsk_collection.insert_one({'videoAsks' : videoAsks_dict})
+        # result = videoAsk_collection.insert_one({})
 
-        # videoAsk_collection.find_one({"id": 1})
-        return {"message": "Hello World"}
+        print(f"Inserted document with ID: {result.inserted_id}")
+        return {"message": "VideoAsk created successfully."}
+
     except Exception as e:
         print(str(e))
 
@@ -26,11 +26,11 @@ async def save_VideoAsk(videoAsks : List[VideoAsk]):
 async def get_VideoAsk()-> List[dict]:
     try:
         videoAsks = videoAsk_collection.find()
-        for videoAsk in videoAsks:
-            print (videoAsk)
+        # for videoAsk in videoAsks:
+        #     print (videoAsk)
 
-        videoAsks_list = [doc for doc in videoAsks]
-        return videoAsks_list
+        # videoAsks_list = [doc for doc in videoAsks]
+        # return videoAsks_list
     except Exception as e:
         print(str(e))
 

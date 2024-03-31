@@ -17,6 +17,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# Python version : 3.8.10
+
 # steps:
 
 # python3 -m venv venv
@@ -27,5 +30,5 @@ app.add_middleware(
 # pip freeze > requirements.txt
 
 # install requirements.txt:
-# pip install -r requirements. txt
+# pip install -r requirements.txt
 
