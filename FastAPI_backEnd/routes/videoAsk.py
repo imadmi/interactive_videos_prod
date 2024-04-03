@@ -1,36 +1,43 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, UploadFile, File
 from models.videoAsk import VideoAsk
-from config.database import videoAsk_collection , client
+from schemas.videoAsk import save_VideoAsk_in_db, get_videos_from_db, get_video_from_db, upload_blob
 from typing import List
 
-videoAskRouter = APIRouter()
+
+videoAskRouter = APIRouter(tags=["videoAsk"])
+
 
 @videoAskRouter.post("/saveVideoAsk")
-def save_VideoAsk(videoAsks : List[VideoAsk]):
+async def save_VideoAsk(videoAsks : List[VideoAsk]):
     try:
-        # R = client.abc
-        # print(R)
-        videoAsks_dict = [videoAsk.dict() for videoAsk in videoAsks]
-
-        result = videoAsk_collection.insert_one({'videoAsks' : videoAsks_dict})
-        # result = videoAsk_collection.insert_one({})
-
-        print(f"Inserted document with ID: {result.inserted_id}")
-        return {"message": "VideoAsk created successfully."}
-
+        await save_VideoAsk_in_db(videoAsks)
+        return {"success": "true"}
     except Exception as e:
-        print(str(e))
+        return { "success": "false", "error": str(e) }
 
 
-@videoAskRouter.get("/getVideoAsk")
-async def get_VideoAsk()-> List[dict]:
+@videoAskRouter.get("/getVideoAsks")
+async def get_VideoAsk():
     try:
-        videoAsks = videoAsk_collection.find()
-        # for videoAsk in videoAsks:
-        #     print (videoAsk)
-
-        # videoAsks_list = [doc for doc in videoAsks]
-        # return videoAsks_list
+        videoAsk_list = await get_videos_from_db()
+        return {"success": True, "videoAsks": videoAsk_list}
     except Exception as e:
-        print(str(e))
+        return {"success": False, "error": str(e)}
 
+
+@videoAskRouter.get("/getVideoAsk/{id}")
+async def get_VideoAsk_by_id(id: str):
+    try:
+        videoAsk = await get_video_from_db(id)
+        return {"success": True, "videoAsk": videoAsk}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@videoAskRouter.post("/uploadfile")
+async def upload_file(file: UploadFile = File(...)):
+    try:
+        url = await upload_blob(file)
+        return {"success": True, "url": url}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
