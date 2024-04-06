@@ -442,6 +442,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
                   loop
                   muted={context.isMuted}
                   autoPlay
+                  playsInline
                   onPlay={StopAudio}
                   className={`h-dvh w-screen ${
                     context.isVideoPortrait
