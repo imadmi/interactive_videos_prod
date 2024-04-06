@@ -16,48 +16,36 @@ const Page = (param: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await fetch(
-        //   `${process.env.NEXT_PUBLIC_API_URL}:3001/getVideoAsks`,
-        //   {
-        //     method: "GET",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //   }
-        // );
-        // if (!response.ok) {
-        //   console.error("Fetching error:", response);
-        //   return;
-        // }
-        // const data: VideoAsk[] = await response.json();
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}:8000/getVideoAsk/${param.params.id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          console.error("Fetching error:", response);
+          return;
+        }
+        const data = await response.json();
+        // const data: VideoAsk[] = mockData; // testing with mock data
 
-        const data: VideoAsk[] = mockData; // testing with mock data
-
-        let nextVideo = null;
+        if (data.success === false) {
+          console.error("Fetching error:", response);
+          return;
+        }
+        context.setVideoAsks(data.videoAsk.videoAsks as VideoAsk[]);
+        context.setvideoAsk(data.videoAsk.videoAsks[0]);
         if (start !== null && start !== "" && start !== undefined) {
-          nextVideo = data.find((video) => video.id === start);
-        } else {
-          nextVideo = data.find((video) => video.id === param.params.id);
-        }
-
-        if (nextVideo !== undefined) {
+          let nextVideo = data.videoAsk.videoAsks.find(
+            (video: VideoAsk) => video.id === start
+          );
           context.setvideoAsk(nextVideo);
-        } else {
-          const emptyVideoAsk = {
-            id: "",
-            title: "",
-            url: "",
-            questions: [],
-          };
-          context.setvideoAsk(emptyVideoAsk);
-          toast.error("Video with the specified ID was not found.", {
-            id: "404video",
-          });
         }
-
-        context.setVideoAsks(data);
       } catch (error) {
-        const message = "An error occurred while fetching the data." + error;
+        const message = "Error while fetching :" + error;
         toast.error(message, {
           id: "fetching",
         });
@@ -70,7 +58,6 @@ const Page = (param: any) => {
   return (
     <>
       <VideoAskComponent
-        // mockData={context.videoAsks}
         routedTo="/dashboard"
       />
     </>

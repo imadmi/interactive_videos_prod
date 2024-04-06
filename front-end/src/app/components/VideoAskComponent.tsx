@@ -244,6 +244,15 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     }
   };
 
+  // const scrollToDiv = (id: string) => {
+  //   const element = document.getElementById(id);
+  //   if (element) {
+  //     const elementPosition =
+  //       element.getBoundingClientRect().top + window.scrollY;
+  //     window.scrollTo({ top: elementPosition, behavior: "instant" });
+  //   }
+  // };
+
   const [prevideo, setVideo] = useState<VideoAsk | null>(null);
 
   // get the last video from the stack
@@ -256,56 +265,64 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
     }
   }, [context.videoAsk]);
 
-  useEffect(() => {
-    const checkViewPort = () => {
-      console.log('checkk');
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && entry.intersectionRatio >= 1.0) {
-
-              
-              const stack = context.previosVideos.copy();
-              if (stack.isEmpty())  return;
-      
-              const lastVideo = stack.pop();
-              context.setPreviosVideos(stack);
-              const videos = context.videoAsks;
-              if (!lastVideo) return;
-              const nextVideo = videos.find((video) => video.id === lastVideo.id);
-              if (nextVideo !== undefined) {
-                context.setvideoAsk(nextVideo);
-              }
-              scrollToDiv("bottom");
+  const checkViewPort = () => {
+    scrollToDiv("bottom"); //firfox
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (
+            entry.isIntersecting &&
+            entry.intersectionRatio >= 1.0 &&
+            entry.target.id === "top"
+          ) {
+            const stack = context.previosVideos.copy();
+            if (stack.isEmpty()) return;
+            // const lastVideo = stack.peek();
+            const lastVideo = stack.pop();
+            context.setPreviosVideos(stack);
+            const videos = context.videoAsks;
+            if (!lastVideo) return;
+            const nextVideo = videos.find((video) => video.id === lastVideo.id);
+            if (nextVideo !== undefined) {
+              context.setvideoAsk(nextVideo);
             }
-          });
-        },
-        {
-          threshold: [1.0], // Trigger the callback when the div is visible
-        }
-      );
-  
-      if (myDivRef.current) {
-        observer.observe(myDivRef.current);
+          }
+          scrollToDiv("bottom"); // chrome
+        });
+      },
+      {
+        root: document.getElementById("history-scroll-container"),
+        threshold: [1.0],
       }
-  
-      return () => {
-        if (myDivRef.current) {
-          observer.unobserve(myDivRef.current);
-        }
-      };
+    );
+
+    if (myDivRef.current) {
+      observer.observe(myDivRef.current);
     }
+
+    return () => {
+      if (myDivRef.current) {
+        observer.unobserve(myDivRef.current);
+      }
+    };
+  };
+
+  useEffect(() => {
     checkViewPort();
   }, [myDivRef.current]);
 
   return (
-    <div className="snap-y h-dvh w-screen overflow-auto snap-mandatory overflow-x-hidden scrollbar-hidden">
+    <div
+      id="history-scroll-container"
+      className="snap-y h-dvh w-screen overflow-auto snap-mandatory overflow-x-hidden scrollbar-hidden"
+    >
       {prevideo && (
         <div
+          id="top"
           ref={myDivRef}
           key={prevideo.id}
           className="snap-center sm:hidden flex w-screen h-dvh  flex-col items-center 
-      justify-center bg-gray-100"
+    justify-center bg-gray-100"
         >
           <div
             className={`relative  ${
@@ -347,12 +364,13 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
                     src={prevideo.url}
                     muted={true}
                     onPlay={StopAudio}
+                    playsInline
                     className={`h-dvh w-screen ${
                       context.isVideoPortrait
                         ? `lg:h-full object-cover sm:object-contain `
                         : "sm:w-full sm:h-auto object-contain "
                     }
-                  `}
+                `}
                   >
                     <source src={prevideo.url} />
                     Your browser does not support the video tag.
@@ -390,7 +408,7 @@ const VideoAskComponent: React.FC<VideoAskComponentProps> = ({
           }  overflow-hidden  flex justify-center items-center bg-black lg:bg-white `}
           onClick={togglePlayPause}
         >
-          <TitleComponent title={context.videoAsk.title}/>
+          <TitleComponent title={context.videoAsk.title} />
           <div
             className={`lg:relative lg:h-full ${
               context.isFullscrean ? "w-full" : "max-w-full lg:w-1/2"

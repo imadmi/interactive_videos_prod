@@ -9,10 +9,8 @@ export type User = {
 };
 
 export type MyVideoAsk = {
-  id: string;
-  title: string;
-  url: string;
-  creationDate: string;
+  _id: string;
+  videoAsks: VideoAsk[];
 };
 
 export type AppContextProps = {
@@ -58,7 +56,7 @@ export type AppContextProps = {
   setDropOpenModal: (isDropsOpenModal: number) => void;
   isNavbarModalOpen: boolean;
   setNavbarModalOpen: (isNavbarModalOpen: boolean) => void;
-  myVideoAsks: MyVideoAsk[];
+  myVideoAsks: MyVideoAsk[] | undefined;
   setMyVideoAsks: (myVideoAsks: MyVideoAsk[]) => void;
   isVideoPortrait: boolean;
   setisVideoPortrait: (isVideoPortrait: boolean) => void;
@@ -113,7 +111,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isDropsOpen, setDropOpen] = useState(0);
   const [isDropsOpenModal, setDropOpenModal] = useState(0);
   const [isNavbarModalOpen, setNavbarModalOpen] = useState(false);
-  const [myVideoAsks, setMyVideoAsks] = useState<MyVideoAsk[]>([]);
+  const [myVideoAsks, setMyVideoAsks] = useState<MyVideoAsk[]>();
   const [isVideoPortrait, setisVideoPortrait] = useState(true);
   const [audioUrl, setaudioUrl] = useState("");
   const [isAudioPlayed, setisAudioPlayed] = useState(false);

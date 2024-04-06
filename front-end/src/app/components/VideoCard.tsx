@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 export default function VideoCard({ Id }: { Id: string }) {
   const handleCopy = async () => {
     try {
-      const link = `${process.env.NEXT_PUBLIC_API_URL}:3000/shared/${Id}`;
+      const link = `${process.env.NEXT_PUBLIC_API_URL}:3000/${Id}`;
       await navigator.clipboard.writeText(link);
       toast.success("Link copied to clipboard");
     } catch (err) {

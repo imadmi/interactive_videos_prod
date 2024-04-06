@@ -14,9 +14,9 @@ export default function VidesGallery() {
 
   useEffect(() => {
     try {
-      const checkJwtCookie = async () => {
+      const getVideos = async () => {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}:3001/myvideoasks`,
+          `${process.env.NEXT_PUBLIC_API_URL}:8000/getVideoAsks`,
           {
             method: "GET",
             credentials: "include",
@@ -26,11 +26,11 @@ export default function VidesGallery() {
         if (data === null || data.succes === false) {
           return;
         } else if (context && data !== null) {
-          const myVideoAsks = data.myVideoAsks;
+          const myVideoAsks = data.videoAsks;
           context.setMyVideoAsks(myVideoAsks);
         }
       };
-      checkJwtCookie();
+      getVideos();
     } catch (error: any) {
       const msg = "Error during getting videos" + error.message;
       toast.error(msg);
@@ -46,24 +46,24 @@ export default function VidesGallery() {
         {context.myVideoAsks &&
           context.myVideoAsks.map((video) => (
             <div
-              key={video.id}
+              key={video._id}
               className="bg-white rounded-xl p-4 group cursor-pointer"
             >
               <div className="relative">
                 <video
                   className=" w-full h-40 object-cover rounded-md"
-                  src={video.url}
+                  src={video.videoAsks[0].url}
                   muted
                   autoPlay
                   loop
                   ref={handleVideoRef}
                 >
-                  <source src={video.url} type="video/mp4" />
+                  <source src={video.videoAsks[0].url} type="video/mp4" />
                 </video>
-                <VideoCard Id={video.id} />
+                <VideoCard Id={video._id} />
               </div>
               <div className="w-full  text-center mt-2">
-                {video.creationDate.split("T")[0]}
+                {video._id}
               </div>
             </div>
           ))}

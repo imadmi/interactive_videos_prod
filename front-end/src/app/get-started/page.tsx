@@ -10,7 +10,6 @@ const Page = () => {
       <VideoAskComponent
         mockData={mockData}
         routedTo="/dashboard"
-        // buttonLink="/dashboard"
       />
     </div>
   );

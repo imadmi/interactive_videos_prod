@@ -39,9 +39,9 @@ const QuestionList = ({
     } else {
       let stack = context.previosVideos;
       stack.push(context.videoAsk);
-      stack.print();
 
       context.setPreviosVideos(stack);
+      stack.print()
 
       handleQuestionClick(qst.next_video_id);
       context.setIsPaused(false);

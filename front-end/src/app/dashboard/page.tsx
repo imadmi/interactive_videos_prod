@@ -60,9 +60,7 @@ const VideoUploadForm = () => {
         id: "",
         title: "",
         url: "",
-        questions: [
-          { question: "", audioUrl: "", next_video_id: null },
-        ],
+        questions: [{ question: "", audioUrl: "", next_video_id: null }],
       },
     ]);
   };
@@ -87,8 +85,7 @@ const VideoUploadForm = () => {
     try {
       e.preventDefault();
       const res = await fetch(
-        // `${process.env.NEXT_PUBLIC_API_URL}:3001/saveVideoAsk`,
-        `http://127.0.0.1:8000/saveVideoAsk`,
+        `${process.env.NEXT_PUBLIC_API_URL}:8000/saveVideoAsk`,
         {
           method: "POST",
           headers: {
@@ -98,16 +95,13 @@ const VideoUploadForm = () => {
           body: JSON.stringify(context.videoAsks),
         }
       );
-      console.log(context.videoAsks);
       const data = await res.json();
 
-      if (data.success) {
-        toast.success("VideoAsk created successfully");
-      } else if (data.error) {
-        const msg = "Failed to create VideoAsk :" + data.error;
-        toast.error(msg);
-      } else {
+      if (data.success === false) {
+        console.log("Error :", data.error)
         toast.error("Failed to create VideoAsk");
+      } else {
+        toast.success("VideoAsk created successfully");
       }
     } catch (error) {
       console.log(error);
@@ -148,11 +142,7 @@ const VideoUploadForm = () => {
                       Video ID:
                     </label>
                     {isFormVisible[videoAskIndex] === false && (
-                      <div
-                        className={`ml-4`}
-                      >
-                        {videoAsk.id}
-                      </div>
+                      <div className={`ml-4`}>{videoAsk.id}</div>
                     )}
                   </div>
                   <button

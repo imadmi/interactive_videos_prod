@@ -16,7 +16,7 @@ export default function UploadAudio({ qstnIndex }: { qstnIndex: number }) {
       data.set("file", Audiofile);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}:3001/uploadVideo`,
+        `${process.env.NEXT_PUBLIC_API_URL}:8000/uploadfile`,
         {
           method: "POST",
           credentials: "include",
@@ -37,10 +37,10 @@ export default function UploadAudio({ qstnIndex }: { qstnIndex: number }) {
         if ("url" in newVideoAsk[context.VideoaskIndex]) {
           console.log("qstnIndex ", qstnIndex);
           newVideoAsk[context.VideoaskIndex].questions[qstnIndex].audioUrl =
-            resData.path;
+            resData.url;
           context.setVideoAsks(newVideoAsk);
         }
-        return resData.path;
+        return resData.url;
       } else {
         toast.error("Failed to upload audio");
         return "";

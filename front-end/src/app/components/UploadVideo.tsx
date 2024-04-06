@@ -15,13 +15,8 @@ export default function UploadVideo() {
       const data = new FormData();
       data.set("file", Videofile);
 
-      // const res = await fetch("/api/upload", {
-      //   method: "POST",
-      //   body: data,
-      // });
-
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}:3001/uploadVideo`,
+        `${process.env.NEXT_PUBLIC_API_URL}:8000/uploadfile`,
         {
           method: "POST",
           credentials: "include",
@@ -36,14 +31,14 @@ export default function UploadVideo() {
         return "";
       }
 
-      if (resData && resData.success) {
+      if (resData && resData.success === true) {
         context.setisVideoModalOpen(false);
         const newVideoAsk = [...context.videoAsks];
         if ("url" in newVideoAsk[context.VideoaskIndex]) {
-          newVideoAsk[context.VideoaskIndex].url = resData.path;
+          newVideoAsk[context.VideoaskIndex].url = resData.url;
           context.setVideoAsks(newVideoAsk);
         }
-        return resData.path;
+        return resData.url;
       } else {
         toast.error("Failed to upload video");
         return "";
