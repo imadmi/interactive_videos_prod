@@ -1,8 +1,8 @@
-# .env
+.env
 .DS_Store
 front-end/.next/
 front-end/src/app/api/gcp/*.json
 back-end/dist/
 front-end/node_modules/
 back-end/node_modules/
-back-end/gcpBucketVideos.json
+gcpBucketVideos.json

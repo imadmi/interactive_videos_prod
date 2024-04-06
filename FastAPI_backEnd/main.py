@@ -19,16 +19,3 @@ app.add_middleware(
 
 
 # Python version : 3.8.10
-
-# steps:
-
-# python3 -m venv venv
-# source venv/bin/activate
-
-
-# generate requirements.txt:
-# pip freeze > requirements.txt
-
-# install requirements.txt:
-# pip install -r requirements.txt
-

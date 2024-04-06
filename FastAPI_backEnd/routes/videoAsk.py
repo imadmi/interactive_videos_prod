@@ -41,3 +41,13 @@ async def upload_file(file: UploadFile = File(...)):
         return {"success": True, "url": url}
     except Exception as e:
         return {"success": False, "error": str(e)}
+    
+
+from config.database import videoAsk_collection
+@videoAskRouter.delete("/deleteAllVideoAsks")
+async def delete_all_files():
+    try:
+        videoAsk_collection.delete_many({})
+        return {"success": True}
+    except Exception as e:
+        return {"success": False, "error": str(e)}

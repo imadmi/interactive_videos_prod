@@ -29,7 +29,8 @@ async def upload_blob(file: UploadFile):
 
 
 async def save_VideoAsk_in_db(videoAsks : List[VideoAsk]):
-    data = [modify_video_id(video_ask) for video_ask in videoAsks]
+    # data = [modify_video_id(video_ask) for video_ask in videoAsks]
+    data = [video_ask.dict() for video_ask in videoAsks]
     videoAsk_collection.insert_one({'videoAsks' : data})
 
 
